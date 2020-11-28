@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Scarne\'s Dice</string>
+    <string name="btn_roll">Roll</string>
+    <string name="template_score">Your Score: %s1 | Computed Score: %s2</string>
+    <string name="btn_hold">Hold</string>
+    <string name="btn_reset">Reset</string>
 </resources>

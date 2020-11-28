@@ -7,12 +7,60 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tv_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/template_score"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_roll"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/iv_dice" />
+
+    <ImageView
+        android:id="@+id/iv_dice"
+        android:layout_width="180dp"
+        android:layout_height="0dp"
+        android:layout_margin="20dp"
+        android:src="@drawable/dice1"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_score"
+        app:layout_constraintLeft_toLeftOf="@id/tv_score"
+        app:layout_constraintRight_toRightOf="@id/tv_score"/>
+
+    <Button
+        android:id="@+id/btn_roll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_roll"
+        android:layout_margin="10dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_score"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_hold"/>
+
+    <Button
+        android:id="@+id/btn_hold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_hold"
+        android:layout_marginRight="10dp"
+        app:layout_constraintTop_toTopOf="@id/btn_roll"
+        app:layout_constraintBottom_toBottomOf="@id/btn_roll"
+        app:layout_constraintLeft_toRightOf="@id/btn_roll"
+        app:layout_constraintRight_toLeftOf="@id/btn_reset"/>
+
+    <Button
+        android:id="@+id/btn_reset"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_reset"
+        android:layout_marginRight="10dp"
+        app:layout_constraintTop_toTopOf="@id/btn_roll"
+        app:layout_constraintBottom_toBottomOf="@id/btn_roll"
+        app:layout_constraintLeft_toRightOf="@id/btn_hold"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
