@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        updateScore(0)
         binding.btnRoll.setOnClickListener { onRollClick() }
     }
 
@@ -42,5 +43,19 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         )
+        updateScore(diceNumber)
+    }
+
+    private fun updateScore(score: Int) {
+        userTurnScore = if (score != 1) score else 0
+        updateTvScore(userOverallScore, userTurnScore, comOverallScore)
+    }
+
+    private fun updateTvScore(
+        userOverallScore: Int,
+        userTurnScore: Int,
+        comOverallScore: Int
+    ) {
+        binding.tvScore.text = getString(R.string.template_score, userOverallScore, comOverallScore, userTurnScore)
     }
 }
