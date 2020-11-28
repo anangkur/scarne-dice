@@ -19,7 +19,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        updateScore(0)
         binding.btnRoll.setOnClickListener { onRollClick() }
+        binding.btnReset.setOnClickListener { resetScore() }
+        binding.btnHold.setOnClickListener { holdScore(userTurnScore) }
     }
 
     private fun onRollClick() {
@@ -42,5 +45,33 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         )
+        updateScore(diceNumber)
+    }
+
+    private fun updateScore(score: Int) {
+        userTurnScore = if (score != 1) score else 0
+        updateTvScore(userOverallScore, userTurnScore, comOverallScore)
+    }
+
+    private fun updateTvScore(
+        userOverallScore: Int,
+        userTurnScore: Int,
+        comOverallScore: Int
+    ) {
+        binding.tvScore.text = getString(R.string.template_score, userOverallScore, comOverallScore, userTurnScore)
+    }
+
+    private fun resetScore() {
+        userTurnScore = 0
+        userOverallScore = 0
+        comTurnScore = 0
+        comOverallScore = 0
+        updateTvScore(userOverallScore, userTurnScore, comOverallScore)
+    }
+
+    private fun holdScore(userTurnScore: Int) {
+        userOverallScore = userTurnScore
+        this.userTurnScore = 0
+        updateTvScore(userOverallScore, this.userTurnScore, comOverallScore)
     }
 }
