@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         updateScore(0)
         binding.btnRoll.setOnClickListener { onRollClick() }
         binding.btnReset.setOnClickListener { resetScore() }
+        binding.btnHold.setOnClickListener { holdScore(userTurnScore) }
     }
 
     private fun onRollClick() {
@@ -66,5 +67,11 @@ class MainActivity : AppCompatActivity() {
         comTurnScore = 0
         comOverallScore = 0
         updateTvScore(userOverallScore, userTurnScore, comOverallScore)
+    }
+
+    private fun holdScore(userTurnScore: Int) {
+        userOverallScore = userTurnScore
+        this.userTurnScore = 0
+        updateTvScore(userOverallScore, this.userTurnScore, comOverallScore)
     }
 }
