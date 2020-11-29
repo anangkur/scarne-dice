@@ -10,7 +10,7 @@
         android:id="@+id/tv_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/template_score"
+        android:text="@string/template_score_user"
         android:layout_margin="20dp"
         app:layout_constraintBottom_toTopOf="@id/btn_roll"
         app:layout_constraintLeft_toLeftOf="parent"

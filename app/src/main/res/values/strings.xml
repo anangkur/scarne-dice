@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Scarne\'s Dice</string>
     <string name="btn_roll">Roll</string>
-    <string name="template_score">Your Score: %1$s\nComputed Score: %2$s\nYour Turn Score: %3$s</string>
+    <string name="template_score_user">Your Score: %1$s\nComputed Score: %2$s\nYour Turn Score: %3$s</string>
+    <string name="template_score_com">Your Score: %1$s\nComputed Score: %2$s\nCom Turn Score: %3$s</string>
     <string name="btn_hold">Hold</string>
     <string name="btn_reset">Reset</string>
 </resources>
