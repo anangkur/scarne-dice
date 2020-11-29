@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.anangkur.scarnesdice.databinding.ActivityMainBinding
+import androidx.appcompat.app.AlertDialog
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,8 +58,8 @@ class MainActivity : AppCompatActivity() {
         if (score != 1) {
             if (isUser) userTurnScore += score else comTurnScore += score
         } else {
-            changeUser(isUser)
             if (isUser) userTurnScore = 0 else comTurnScore = 0
+            changeUser(isUser)
         }
         updateTvScore(userOverallScore, userTurnScore, comOverallScore, comTurnScore, isUser)
     }
@@ -88,9 +89,11 @@ class MainActivity : AppCompatActivity() {
         if (isUser) {
             userOverallScore += turnScore
             userTurnScore = 0
+            checkWinner(userOverallScore, isUser)
         } else {
             comOverallScore += turnScore
             comTurnScore = 0
+            checkWinner(comOverallScore, isUser)
         }
         updateTvScore(userOverallScore, userTurnScore, comOverallScore, comTurnScore, isUser)
         changeUser(isUser)
@@ -112,5 +115,27 @@ class MainActivity : AppCompatActivity() {
             binding.btnHold.isEnabled = true
             binding.btnRoll.isEnabled = true
         }
+    }
+
+    private fun checkWinner(overallScore: Int, isUser: Boolean) {
+        if (overallScore > 100) {
+            showWinnerDialog(getUserName(isUser))
+        }
+    }
+
+    private fun getUserName(isUser: Boolean): String {
+        return if (isUser) "User" else "Computer"
+    }
+
+    private fun showWinnerDialog(winner: String) {
+        AlertDialog.Builder(this)
+                .setTitle("We have the winner!")
+                .setMessage("Congratulation $winner! You win because Your score is above 100!")
+                .setPositiveButton("OK, Play again!") { dialog, _ ->
+                    resetScore()
+                    dialog.dismiss()
+                }
+                .create()
+                .show()
     }
 }
