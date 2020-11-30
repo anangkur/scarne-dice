@@ -1,10 +1,11 @@
 package com.anangkur.scarnesdice
 
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.anangkur.scarnesdice.databinding.ActivityMainBinding
-import androidx.appcompat.app.AlertDialog
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,12 +17,15 @@ class MainActivity : AppCompatActivity() {
     private var comTurnScore = 0
     private var randomNumber = 0
 
+    private lateinit var timer: Timer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        updateScore(0, true)
+        updateTvScore(userOverallScore, userTurnScore, comOverallScore, comTurnScore, true)
+
         binding.btnRoll.setOnClickListener { onRollClick(true) }
         binding.btnReset.setOnClickListener { resetScore() }
         binding.btnHold.setOnClickListener { holdScore(userTurnScore, true) }
@@ -30,6 +34,14 @@ class MainActivity : AppCompatActivity() {
     private fun onRollClick(isUser: Boolean) {
         randomNumber = (1..6).random()
         updateIvDice(randomNumber, isUser)
+        updateScore(randomNumber, isUser)
+        updateTvScore(userOverallScore, userTurnScore, comOverallScore, comTurnScore, isUser)
+        if (isUser.not()) {
+            val isComRolledAgain = isComRolledAgain()
+            if (isComRolledAgain.not()) {
+                holdScore(comTurnScore, false)
+            }
+        }
     }
 
     private fun isComRolledAgain(): Boolean {
@@ -38,20 +50,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateIvDice(diceNumber: Int, isUser: Boolean) {
         binding.ivDice.setImageDrawable(
-            ContextCompat.getDrawable(
-                this,
-                when (diceNumber) {
-                    1 -> R.drawable.dice1
-                    2 -> R.drawable.dice2
-                    3 -> R.drawable.dice3
-                    4 -> R.drawable.dice4
-                    5 -> R.drawable.dice5
-                    6 -> R.drawable.dice6
-                    else -> 0
-                }
-            )
+                ContextCompat.getDrawable(
+                        this,
+                        when (diceNumber) {
+                            1 -> R.drawable.dice1
+                            2 -> R.drawable.dice2
+                            3 -> R.drawable.dice3
+                            4 -> R.drawable.dice4
+                            5 -> R.drawable.dice5
+                            6 -> R.drawable.dice6
+                            else -> 0
+                        }
+                )
         )
-        updateScore(diceNumber, isUser)
     }
 
     private fun updateScore(score: Int, isUser: Boolean) {
@@ -61,15 +72,14 @@ class MainActivity : AppCompatActivity() {
             if (isUser) userTurnScore = 0 else comTurnScore = 0
             changeUser(isUser)
         }
-        updateTvScore(userOverallScore, userTurnScore, comOverallScore, comTurnScore, isUser)
     }
 
     private fun updateTvScore(
-        userOverallScore: Int,
-        userTurnScore: Int,
-        comOverallScore: Int,
-        comTurnScore: Int,
-        isUser: Boolean
+            userOverallScore: Int,
+            userTurnScore: Int,
+            comOverallScore: Int,
+            comTurnScore: Int,
+            isUser: Boolean
     ) {
         binding.tvScore.text = if (isUser)
             getString(R.string.template_score_user, userOverallScore, comOverallScore, userTurnScore)
@@ -102,18 +112,22 @@ class MainActivity : AppCompatActivity() {
     private fun computerTurn() {
         binding.btnHold.isEnabled = false
         binding.btnRoll.isEnabled = false
-        do {
-            onRollClick(false)
-        } while (randomNumber != 1 && isComRolledAgain())
-        holdScore(comTurnScore, false)
+        timer = Timer()
+        timer.schedule(ComputerTask(), 0, 1000)
+    }
+
+    private fun userTurn() {
+        binding.btnHold.isEnabled = true
+        binding.btnRoll.isEnabled = true
+        timer.cancel()
+        timer.purge()
     }
 
     private fun changeUser(isUser: Boolean) {
         if (isUser) {
             computerTurn()
         } else {
-            binding.btnHold.isEnabled = true
-            binding.btnRoll.isEnabled = true
+            userTurn()
         }
     }
 
@@ -137,5 +151,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 .create()
                 .show()
+    }
+
+    inner class ComputerTask: TimerTask() {
+        override fun run() {
+            this@MainActivity.runOnUiThread {
+                onRollClick(false)
+            }
+        }
     }
 }
